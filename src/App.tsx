@@ -1,25 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ExploreTopics from './pages/ExploreTopics';
+import Home from './pages/Home';
+import SidebarLeft from './components/Sidebars/SidebarLeft';
+import SidebarRight from './components/Sidebars/SidebarRight';
+import Layout from './Layout/Layout';
+import MainSection from './Layout/MainSection';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Layout>
+        <SidebarLeft />
+        <MainSection>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/explore" element={<ExploreTopics />} />
+          </Routes>
+        </MainSection>
+        <SidebarRight />
+      </Layout>
+    </BrowserRouter>
   );
 }
 
