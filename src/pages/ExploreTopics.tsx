@@ -59,6 +59,7 @@ const ExploreTopics = () => {
             title={post.title}
             category={post.category}
             content={post.content}
+            key={Math.random().toString().slice(1)}
           />
         ))}
       </div>

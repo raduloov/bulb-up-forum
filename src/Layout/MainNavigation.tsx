@@ -1,7 +1,8 @@
 import { SearchIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
-// import userIcon from '../assets/user.png';
+import userIcon from '../assets/user.png';
 import logo from '../assets/logo.png';
+import UserDropdown from '../components/UI/Dropdown';
 
 const MainNavigation = () => {
   return (
@@ -34,7 +35,10 @@ const MainNavigation = () => {
         >
           Log In
         </Link>
-        {/* <img src={userIcon} alt="User icon" className="h-10 m-1" /> */}
+        <div>
+          <img src={userIcon} alt="User icon" className="h-10 ml-5" />
+          {/* <UserDropdown /> */}
+        </div>
       </div>
     </header>
   );

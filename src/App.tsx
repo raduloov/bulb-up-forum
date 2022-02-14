@@ -5,8 +5,8 @@ import SidebarLeft from './components/Sidebars/SidebarLeft';
 import SidebarRight from './components/Sidebars/SidebarRight';
 import Layout from './Layout/Layout';
 import MainSection from './Layout/MainSection';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
+import Login from './pages/auth/Login';
+import Signup from './pages/auth/Signup';
 
 function App() {
   return (
