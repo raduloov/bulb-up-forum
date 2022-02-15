@@ -12,6 +12,9 @@ import { getAuth } from 'firebase/auth';
 import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
 import ChangePassword from './pages/auth/ChangePassword';
+import Profile from './pages/Profile';
+import ProtectedRoute from './pages/ProtectedRoute';
+import NotFound from './pages/NotFound';
 
 initializeApp(config.firebase);
 
@@ -30,7 +33,7 @@ function App() {
         setIsLoggedIn(false);
       }
     });
-  }, [auth]);
+  });
 
   return (
     <BrowserRouter>
@@ -42,10 +45,14 @@ function App() {
             <Route path="/login" element={<Login isLoggedIn={isLoggedIn} />} />
             <Route path="/signup" element={<Signup isLoggedIn={isLoggedIn} />} />
             <Route path="/explore" element={<ExploreTopics />} />
-            <Route path="/profile">
-              <Route index element></Route>
+            <Route
+              path="/profile"
+              element={<ProtectedRoute isLoggedIn={isLoggedIn} />}
+            >
+              <Route index element={<Profile />} />
               <Route path="/profile/change-password" element={<ChangePassword />} />
             </Route>
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </MainSection>
         <SidebarRight />

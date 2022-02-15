@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const SidebarLeft = () => {
   return (
-    <div className="grow flex">
+    <div className="grow flex mt-28">
       <ul className="m-auto mt-10 mb-10 text-xl">
         <li className="mb-3 hover:text-red-400 duration-300">
           <Link to="/">Home</Link>

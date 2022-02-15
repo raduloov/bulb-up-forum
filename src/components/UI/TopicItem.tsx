@@ -1,5 +1,3 @@
-import userIcon from '../../assets/user.png';
-
 const TopicItem: React.FC<{
   title: string;
   category: string;
@@ -14,7 +12,7 @@ const TopicItem: React.FC<{
             <h4 className="text-white">{props.category.toUpperCase()}</h4>
           </div>
           <div>
-            <img className="h-7" src={userIcon} alt="User" />
+            <i className="fa-regular fa-circle-user fa-2x"></i>
           </div>
         </div>
       </div>

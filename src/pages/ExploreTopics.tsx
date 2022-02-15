@@ -1,4 +1,3 @@
-import { GlobeIcon } from '@heroicons/react/outline';
 import TopicItem from '../components/UI/TopicItem';
 
 const DUMMY_POSTS = [
@@ -50,8 +49,9 @@ const ExploreTopics = () => {
   return (
     <section className="flex flex-col items-center mt-16">
       <div className="flex items-center text-3xl text-red-400">
-        <h2>Explore</h2>
-        <GlobeIcon className="h-10 ml-2" />
+        <h2>
+          Explore <i className="fa-solid fa-earth-asia h-10"></i>
+        </h2>
       </div>
       <div className="mt-14">
         {DUMMY_POSTS.map(post => (

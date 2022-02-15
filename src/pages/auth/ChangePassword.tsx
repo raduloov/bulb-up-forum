@@ -1,7 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import firebase from 'firebase/compat/app';
-import { getAuth } from 'firebase/auth';
+import { getAuth, updatePassword } from 'firebase/auth';
 
 const ChangePassword = () => {
   const [changing, setChanging] = useState<boolean>(false);
@@ -10,12 +9,16 @@ const ChangePassword = () => {
   const [confirm, setConfirm] = useState<string>('');
   const [error, setError] = useState<string>('');
 
-  const auth = firebase.auth();
+  const auth = getAuth();
 
   const navigate = useNavigate();
 
   const passwordChangeHandler = async (event: FormEvent) => {
     event.preventDefault();
+
+    if (!auth.currentUser) {
+      return;
+    }
 
     if (password !== confirm) {
       setError('Please make sure your passwords match.');
@@ -28,8 +31,10 @@ const ChangePassword = () => {
 
     setChanging(true);
 
+    const user = auth.currentUser;
+
     try {
-      await auth.currentUser?.updatePassword(password);
+      await updatePassword(user, password);
       console.log('Password change successful.');
       navigate('/');
     } catch (error: any) {

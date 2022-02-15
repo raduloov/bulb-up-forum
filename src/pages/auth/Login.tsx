@@ -35,7 +35,7 @@ const Login: React.FC<{ isLoggedIn: boolean }> = props => {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/');
+      navigate('/profile');
     } catch (error: any) {
       setAuthenticating(false);
 
@@ -59,7 +59,7 @@ const Login: React.FC<{ isLoggedIn: boolean }> = props => {
 
     try {
       await signInWithPopup(auth, new GoogleAuthProvider());
-      navigate('/');
+      navigate('/profile');
     } catch (error: any) {
       setAuthenticating(false);
       setError(error.message);
@@ -67,7 +67,7 @@ const Login: React.FC<{ isLoggedIn: boolean }> = props => {
   };
 
   return (
-    <form className="ml-auto mr-auto mt-16 flex flex-col items-center border-2 border-red-400 rounded-md p-6">
+    <form className="m-auto flex flex-col items-center border-2 border-red-400 rounded-md p-6">
       <h3 className="text-2xl">
         Log in to your <span className="text-red-400">Bulb Up!</span> account
       </h3>
@@ -115,9 +115,9 @@ const Login: React.FC<{ isLoggedIn: boolean }> = props => {
         <button
           onClick={loginWithGoogleHandler}
           disabled={authenticating}
-          className="m-1 p-2 text-white border-2 border-red-400 bg-red-400 rounded-md hover:text-red-400 hover:bg-white transition-all duration-300"
+          className="m-1 p-2 flex items-center justify-center text-white border-2 border-red-400 bg-red-400 rounded-md hover:text-red-400 hover:bg-white transition-all duration-300"
         >
-          Log In With Google
+          <i className="fa-brands fa-google text-xl mr-2"></i> Log In With Google
         </button>
       </div>
     </form>

@@ -55,7 +55,7 @@ const Signup: React.FC<{ isLoggedIn: boolean }> = props => {
   return (
     <form
       onSubmit={signUpHandler}
-      className="ml-auto mr-auto mt-16 flex flex-col items-center border-2 border-red-400 rounded-md p-6"
+      className="m-auto flex flex-col items-center border-2 border-red-400 rounded-md p-6"
     >
       <h3 className="text-2xl">
         Create a <span className="text-red-400">Bulb Up!</span> account

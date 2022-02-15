@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-import { SearchIcon } from '@heroicons/react/outline';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import UserDropdown from '../components/UI/Dropdown';
@@ -16,7 +14,7 @@ const MainNavigation: React.FC<{ isLoggedIn: boolean }> = props => {
   };
 
   return (
-    <header className="p-2 flex justify-evenly items-center shadow-xl">
+    <header className="p-2 flex justify-evenly items-center shadow-xl bg-white z-10 fixed w-full">
       <div className="flex">
         <img src={logo} alt="Logo" className="h-20" />
         <div className="flex flex-col justify-center items-center">
@@ -25,7 +23,7 @@ const MainNavigation: React.FC<{ isLoggedIn: boolean }> = props => {
         </div>
       </div>
       <div className="relative text-md">
-        <SearchIcon className="h-8 ml-2 text-red-400 absolute top-[50%] translate-y-[-50%]" />
+        <i className="fa-solid fa-magnifying-glass ml-2 text-2xl text-red-400 absolute top-[50%] translate-y-[-50%]"></i>
         <input
           className="pt-3 pr-3 pb-3 pl-10 border-2 border-red-100 rounded-md outline-red-400 hover:bg-red-50 focus:bg-red-50"
           type="text"

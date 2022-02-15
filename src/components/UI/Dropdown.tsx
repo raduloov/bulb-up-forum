@@ -1,16 +1,29 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import { UserCircleIcon, CogIcon, LogoutIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
+import { getAuth } from 'firebase/auth';
 
 const UserDropdown: React.FC<{ onLogout: () => void }> = props => {
+  const auth = getAuth();
+  const userPhoto = auth.currentUser?.photoURL;
+  const userEmail = auth.currentUser?.email;
+
   return (
-    <div className="w-56 text-right relative">
+    <div className="text-right relative">
       <Menu as="div">
-        <div>
+        <div className="flex items-center">
           <Menu.Button className="flex py-2">
-            <UserCircleIcon className="h-12 ml-5 text-slate-600 cursor-pointer hover:text-red-400 hover:scale-105 duration-300" />
+            {userPhoto ? (
+              <img
+                src={`${userPhoto}`}
+                alt="User thumbnail"
+                className="h-12 ml-5 text-slate-600 cursor-pointer rounded-[50%] hover:text-red-400 hover:scale-105 duration-300"
+              />
+            ) : (
+              <i className="fa-regular fa-circle-user fa-3x ml-5 text-slate-600 cursor-pointer hover:text-red-400 hover:scale-105 duration-300"></i>
+            )}
           </Menu.Button>
+          <p className="ml-2">{userEmail}</p>
         </div>
         <Transition
           as={Fragment}
@@ -32,27 +45,29 @@ const UserDropdown: React.FC<{ onLogout: () => void }> = props => {
                     } group flex justify-between rounded-md items-center w-full px-2 py-2 duration-300`}
                   >
                     <div className="flex">
-                      <UserCircleIcon className="h-6" />
+                      <i className="fa-regular fa-circle-user"></i>
                     </div>
                     View Profile
                   </Link>
                 )}
               </Menu.Item>
-              <Menu.Item>
-                {({ active }) => (
-                  <Link
-                    to="/profile/change-password"
-                    className={`${
-                      active ? 'bg-red-400 text-white' : 'text-black'
-                    } group flex justify-between rounded-md items-center w-full px-2 py-2 duration-300`}
-                  >
-                    <div className="flex">
-                      <CogIcon className="h-6" />
-                    </div>
-                    Change Password
-                  </Link>
-                )}
-              </Menu.Item>
+              {auth.currentUser?.providerData[0]?.providerId === 'password' && (
+                <Menu.Item>
+                  {({ active }) => (
+                    <Link
+                      to="/profile/change-password"
+                      className={`${
+                        active ? 'bg-red-400 text-white' : 'text-black'
+                      } group flex justify-between rounded-md items-center w-full px-2 py-2 duration-300`}
+                    >
+                      <div className="flex">
+                        <i className="fa-solid fa-gear"></i>
+                      </div>
+                      Change Password
+                    </Link>
+                  )}
+                </Menu.Item>
+              )}
               <Menu.Item>
                 {({ active }) => (
                   <button
@@ -62,7 +77,7 @@ const UserDropdown: React.FC<{ onLogout: () => void }> = props => {
                     } group flex justify-between rounded-md items-center w-full px-2 py-2 duration-300`}
                   >
                     <div className="flex">
-                      <LogoutIcon className="h-6" />
+                      <i className="fa-solid fa-arrow-right-from-bracket"></i>
                     </div>
                     Log Out
                   </button>
