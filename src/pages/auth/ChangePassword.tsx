@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { auth } from '../../config/firebase';
+import firebase from 'firebase/compat/app';
+import { getAuth } from 'firebase/auth';
 
 const ChangePassword = () => {
   const [changing, setChanging] = useState<boolean>(false);
@@ -9,9 +10,13 @@ const ChangePassword = () => {
   const [confirm, setConfirm] = useState<string>('');
   const [error, setError] = useState<string>('');
 
+  const auth = firebase.auth();
+
   const navigate = useNavigate();
 
-  const passwordChangeRequest = () => {
+  const passwordChangeHandler = async (event: FormEvent) => {
+    event.preventDefault();
+
     if (password !== confirm) {
       setError('Please make sure your passwords match.');
       return;
@@ -23,17 +28,24 @@ const ChangePassword = () => {
 
     setChanging(true);
 
-    auth.currentUser
-      ?.updatePassword(password)
-      .then(() => {
-        console.log('Password change successful.');
-        navigate('/');
-      })
-      .catch(err => {
-        console.log(err);
-        setChanging(false);
-        setError(err.message);
-      });
+    try {
+      await auth.currentUser?.updatePassword(password);
+      console.log('Password change successful.');
+      navigate('/');
+    } catch (error: any) {
+      console.log(error);
+
+      if (error.code.includes('auth/invalid-email')) {
+        setError('Invalid email.');
+      } else if (error.code.includes('auth/email-already-in-use')) {
+        setError('Email is already in use.');
+      } else {
+        setError('Unable to register. Please try again later.');
+      }
+
+      setChanging(false);
+      setError(error.message);
+    }
   };
 
   if (auth.currentUser?.providerData[0]?.providerId !== 'password') {
@@ -41,7 +53,10 @@ const ChangePassword = () => {
   }
 
   return (
-    <form className="ml-auto mr-auto mt-16 flex flex-col items-center border-2 border-red-400 rounded-md p-6">
+    <form
+      onSubmit={passwordChangeHandler}
+      className="ml-auto mr-auto mt-16 flex flex-col items-center border-2 border-red-400 rounded-md p-6"
+    >
       <h3 className="text-2xl">Change your password</h3>
       <div className="mt-5">
         <div className="flex flex-col mt-5">
@@ -75,20 +90,19 @@ const ChangePassword = () => {
           />
         </div>
       </div>
-      <div className="mt-10">
-        <Link
-          to="/signup"
-          className="m-1 p-2 text-red-400 border-2 border-red-400 rounded-md hover:bg-red-400 hover:text-white transition-all duration-300"
-        >
-          Dont have an account?
-        </Link>
+      <div className="mt-10 flex flex-col">
         <button
-          onClick={passwordChangeRequest}
           disabled={changing}
           className="m-1 p-2 text-white border-2 border-red-400 bg-red-400 rounded-md hover:text-red-400 hover:bg-white transition-all duration-300"
         >
           Change Password
         </button>
+        <Link
+          to="/profile"
+          className="text-center m-1 p-2 text-red-400 border-2 border-red-400 rounded-md hover:bg-red-400 hover:text-white transition-all duration-300"
+        >
+          Cancel
+        </Link>
       </div>
     </form>
   );

@@ -1,10 +1,20 @@
+import { useState, useEffect } from 'react';
 import { SearchIcon } from '@heroicons/react/outline';
-import { Link } from 'react-router-dom';
-import userIcon from '../assets/user.png';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import UserDropdown from '../components/UI/Dropdown';
+import { getAuth } from 'firebase/auth';
 
-const MainNavigation = () => {
+const MainNavigation: React.FC<{ isLoggedIn: boolean }> = props => {
+  const navigate = useNavigate();
+
+  const auth = getAuth();
+
+  const logoutHandler = async () => {
+    await auth.signOut();
+    navigate('/login');
+  };
+
   return (
     <header className="p-2 flex justify-evenly items-center shadow-xl">
       <div className="flex">
@@ -22,24 +32,29 @@ const MainNavigation = () => {
           placeholder="Search for a topic..."
         />
       </div>
-      <div className="flex items-center">
-        <Link
-          to="/signup"
-          className="m-1 p-2 text-white bg-red-400 border-2 border-red-400 rounded-md hover:bg-white hover:text-red-400 transition-all duration-300"
-        >
-          Sign Up
-        </Link>
-        <Link
-          to="/login"
-          className="m-1 p-2 text-red-400 border-2 border-red-400 rounded-md hover:bg-red-400 hover:text-white transition-all duration-300"
-        >
-          Log In
-        </Link>
-        <div>
-          <img src={userIcon} alt="User icon" className="h-10 ml-5" />
-          {/* <UserDropdown /> */}
+      {!props.isLoggedIn && (
+        <div className="flex items-center">
+          <Link
+            to="/signup"
+            className="m-1 p-2 text-white bg-red-400 border-2 border-red-400 rounded-md hover:bg-white hover:text-red-400 duration-300"
+          >
+            Sign Up
+          </Link>
+          <Link
+            to="/login"
+            className="m-1 p-2 text-red-400 border-2 border-red-400 rounded-md hover:bg-red-400 hover:text-white duration-300"
+          >
+            Log In
+          </Link>
         </div>
-      </div>
+      )}
+      {props.isLoggedIn && (
+        <div className="flex items-center">
+          <div>
+            <UserDropdown onLogout={logoutHandler} />
+          </div>
+        </div>
+      )}
     </header>
   );
 };

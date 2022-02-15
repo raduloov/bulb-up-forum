@@ -1,19 +1,15 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import { ChevronDownIcon } from '@heroicons/react/solid';
-import { CurrencyDollarIcon, ArrowNarrowUpIcon } from '@heroicons/react/outline';
+import { UserCircleIcon, CogIcon, LogoutIcon } from '@heroicons/react/outline';
+import { Link } from 'react-router-dom';
 
-const UserDropdown: React.FC = props => {
+const UserDropdown: React.FC<{ onLogout: () => void }> = props => {
   return (
     <div className="w-56 text-right relative">
-      <Menu as="div" className="absolute inline-block text-left right-10">
+      <Menu as="div">
         <div>
-          <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-40 hover:bg-opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-            Sort by
-            <ChevronDownIcon
-              className="w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100"
-              aria-hidden="true"
-            />
+          <Menu.Button className="flex py-2">
+            <UserCircleIcon className="h-12 ml-5 text-slate-600 cursor-pointer hover:text-red-400 hover:scale-105 duration-300" />
           </Menu.Button>
         </div>
         <Transition
@@ -29,17 +25,46 @@ const UserDropdown: React.FC = props => {
             <div className="p-1">
               <Menu.Item>
                 {({ active }) => (
-                  <button
-                    // onClick={() => props.sortBy('price-asc')}
+                  <Link
+                    to="/profile"
                     className={`${
-                      active ? 'bg-black bg-opacity-70 text-white' : 'text-gray-900'
-                    } group flex justify-between rounded-md items-center w-full px-2 py-2 text-sm`}
+                      active ? 'bg-red-400 text-white' : 'text-black'
+                    } group flex justify-between rounded-md items-center w-full px-2 py-2 duration-300`}
                   >
                     <div className="flex">
-                      <CurrencyDollarIcon className="h-5" />
-                      <ArrowNarrowUpIcon className="h-5" />
+                      <UserCircleIcon className="h-6" />
                     </div>
-                    Price (Ascending)
+                    View Profile
+                  </Link>
+                )}
+              </Menu.Item>
+              <Menu.Item>
+                {({ active }) => (
+                  <Link
+                    to="/profile/change-password"
+                    className={`${
+                      active ? 'bg-red-400 text-white' : 'text-black'
+                    } group flex justify-between rounded-md items-center w-full px-2 py-2 duration-300`}
+                  >
+                    <div className="flex">
+                      <CogIcon className="h-6" />
+                    </div>
+                    Change Password
+                  </Link>
+                )}
+              </Menu.Item>
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    onClick={props.onLogout}
+                    className={`${
+                      active ? 'bg-red-400 text-white' : 'text-black'
+                    } group flex justify-between rounded-md items-center w-full px-2 py-2 duration-300`}
+                  >
+                    <div className="flex">
+                      <LogoutIcon className="h-6" />
+                    </div>
+                    Log Out
                   </button>
                 )}
               </Menu.Item>

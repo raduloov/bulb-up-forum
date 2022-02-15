@@ -1,20 +1,31 @@
-import { useState } from 'react';
+import { FormEvent, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import ErrorText from '../../components/ErrorText';
-import { auth } from '../../config/firebase';
+import ErrorText from '../../components/Errors';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
-const Signup = () => {
+const Signup: React.FC<{ isLoggedIn: boolean }> = props => {
   const [registering, setRegistering] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirm, setConfirm] = useState<string>('');
   const [error, setError] = useState<string>('');
 
+  const auth = getAuth();
+
   const navigate = useNavigate();
 
-  const signUpWithEmailAndPassword = () => {
+  useEffect(() => {
+    if (props.isLoggedIn) {
+      return navigate('/');
+    }
+  }, [props.isLoggedIn, navigate]);
+
+  const signUpHandler = async (event: FormEvent) => {
+    event.preventDefault();
+
     if (password !== confirm) {
       setError('Please make sure your passwords match.');
+      return;
     }
 
     if (error !== '') {
@@ -23,29 +34,29 @@ const Signup = () => {
 
     setRegistering(true);
 
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(result => {
-        console.log(result);
-        navigate('/login');
-      })
-      .catch(err => {
-        console.log(err);
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      navigate('/login');
+    } catch (error: any) {
+      console.log(error);
 
-        if (err.code.includes('auth/weak-password')) {
-          setError('Please enter a stronger password.');
-        } else if (err.code.includes('auth/email-already-in-use')) {
-          setError('Email is already in use.');
-        } else {
-          setError('Unable to register. Please try again later.');
-        }
+      if (error.code.includes('auth/weak-password')) {
+        setError('Password must be at least 6 characters long.');
+      } else if (error.code.includes('auth/email-already-in-use')) {
+        setError('Email is already in use.');
+      } else {
+        setError('Unable to register. Please try again later.');
+      }
 
-        setRegistering(false);
-      });
+      setRegistering(false);
+    }
   };
 
   return (
-    <form className="ml-auto mr-auto mt-16 flex flex-col items-center border-2 border-red-400 rounded-md p-6">
+    <form
+      onSubmit={signUpHandler}
+      className="ml-auto mr-auto mt-16 flex flex-col items-center border-2 border-red-400 rounded-md p-6"
+    >
       <h3 className="text-2xl">
         Create a <span className="text-red-400">Bulb Up!</span> account
       </h3>
@@ -70,7 +81,7 @@ const Signup = () => {
             value={password}
           />
         </div>
-        <div className="flex flex-col mt-5">
+        <div className="flex flex-col mt-5 mb-5">
           <label htmlFor="confirm-password">Please confirm your password:</label>
           <input
             className="p-2 bg-slate-200 rounded-md outline-none hover:bg-slate-100 focus:bg-slate-100"
@@ -81,22 +92,21 @@ const Signup = () => {
           />
         </div>
       </div>
-      <div className="mt-10">
+      <ErrorText error={error} />
+      <div className="mt-2 flex flex-col">
+        <button
+          disabled={registering}
+          className="m-1 p-2 text-white border-2 border-red-400 bg-red-400 rounded-md hover:bg-white hover:text-red-400 transition-all duration-300"
+        >
+          Create an account
+        </button>
         <Link
           to="/login"
           className="m-1 p-2 text-red-400 border-2 border-red-400 rounded-md hover:text-white hover:bg-red-400 transition-all duration-300"
         >
           Already have an account?
         </Link>
-        <button
-          onClick={signUpWithEmailAndPassword}
-          disabled={registering}
-          className="m-1 p-2 text-white border-2 border-red-400 bg-red-400 rounded-md hover:bg-white hover:text-red-400 transition-all duration-300"
-        >
-          Create an account
-        </button>
       </div>
-      <ErrorText error={error} />
     </form>
   );
 };

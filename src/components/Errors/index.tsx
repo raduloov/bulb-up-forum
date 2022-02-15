@@ -9,7 +9,7 @@ const ErrorText: React.FC<ErrorTextProps> = props => {
     return null;
   }
 
-  return <small className="text-red-500">{error}</small>;
+  return <p className="text-red-500">{error}</p>;
 };
 
 export default ErrorText;

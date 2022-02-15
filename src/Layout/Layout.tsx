@@ -1,10 +1,10 @@
 import React from 'react';
 import MainNavigation from './MainNavigation';
 
-const Layout: React.FC = props => {
+const Layout: React.FC<{ isLoggedIn: boolean }> = props => {
   return (
     <>
-      <MainNavigation />
+      <MainNavigation isLoggedIn={props.isLoggedIn} />
       <main className="flex">{props.children}</main>
     </>
   );
