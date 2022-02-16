@@ -1,7 +1,9 @@
 import { FormEvent, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import ErrorText from '../../components/Errors';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+
+import ErrorText from '../../components/Errors';
+import LoadingSpinner from '../../components/UI/LoadingSpinner';
 
 const Signup: React.FC<{ isLoggedIn: boolean }> = props => {
   const [registering, setRegistering] = useState<boolean>(false);
@@ -36,7 +38,7 @@ const Signup: React.FC<{ isLoggedIn: boolean }> = props => {
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      navigate('/login');
+      return navigate('/login');
     } catch (error: any) {
       console.log(error);
 
@@ -60,38 +62,41 @@ const Signup: React.FC<{ isLoggedIn: boolean }> = props => {
       <h3 className="text-2xl">
         Create a <span className="text-red-400">Bulb Up!</span> account
       </h3>
-      <div className="mt-5">
-        <div className="flex flex-col mt-5">
-          <label htmlFor="email">Please enter a valid email:</label>
-          <input
-            className="p-2 bg-slate-200 rounded-md outline-none hover:bg-slate-100 focus:bg-slate-100"
-            type="email"
-            id="email"
-            onChange={event => setEmail(event.target.value)}
-            value={email}
-          />
+      {registering && <LoadingSpinner />}
+      {!registering && (
+        <div className="mt-5">
+          <div className="flex flex-col mt-5">
+            <label htmlFor="email">Please enter a valid email:</label>
+            <input
+              className="p-2 bg-slate-200 rounded-md outline-none hover:bg-slate-100 focus:bg-slate-100"
+              type="email"
+              id="email"
+              onChange={event => setEmail(event.target.value)}
+              value={email}
+            />
+          </div>
+          <div className="flex flex-col mt-5">
+            <label htmlFor="password">Please choose a password:</label>
+            <input
+              className="p-2 bg-slate-200 rounded-md outline-none hover:bg-slate-100 focus:bg-slate-100"
+              type="password"
+              id="password"
+              onChange={event => setPassword(event.target.value)}
+              value={password}
+            />
+          </div>
+          <div className="flex flex-col mt-5 mb-5">
+            <label htmlFor="confirm-password">Please confirm your password:</label>
+            <input
+              className="p-2 bg-slate-200 rounded-md outline-none hover:bg-slate-100 focus:bg-slate-100"
+              type="password"
+              id="confirm-password"
+              onChange={event => setConfirm(event.target.value)}
+              value={confirm}
+            />
+          </div>
         </div>
-        <div className="flex flex-col mt-5">
-          <label htmlFor="password">Please choose a password:</label>
-          <input
-            className="p-2 bg-slate-200 rounded-md outline-none hover:bg-slate-100 focus:bg-slate-100"
-            type="password"
-            id="password"
-            onChange={event => setPassword(event.target.value)}
-            value={password}
-          />
-        </div>
-        <div className="flex flex-col mt-5 mb-5">
-          <label htmlFor="confirm-password">Please confirm your password:</label>
-          <input
-            className="p-2 bg-slate-200 rounded-md outline-none hover:bg-slate-100 focus:bg-slate-100"
-            type="password"
-            id="confirm-password"
-            onChange={event => setConfirm(event.target.value)}
-            value={confirm}
-          />
-        </div>
-      </div>
+      )}
       <ErrorText error={error} />
       <div className="mt-2 flex flex-col">
         <button

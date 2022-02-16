@@ -1,20 +1,38 @@
+import { FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from '../assets/logo.png';
-import UserDropdown from '../components/UI/Dropdown';
-import { getAuth } from 'firebase/auth';
+import { getAuth, signOut } from 'firebase/auth';
 
-const MainNavigation: React.FC<{ isLoggedIn: boolean }> = props => {
+import logo from '../assets/logo.png';
+import UserDropdown from '../components/UI/UserDropdown';
+
+const MainNavigation: React.FC<{
+  isLoggedIn: boolean;
+  onSearch: (searchTerm: string) => void;
+}> = props => {
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
   const navigate = useNavigate();
 
   const auth = getAuth();
 
   const logoutHandler = async () => {
-    await auth.signOut();
-    navigate('/login');
+    await signOut(auth);
+    return navigate('/login');
+  };
+
+  const searchHandler = (event: FormEvent) => {
+    event.preventDefault();
+
+    navigate('/explore');
+    setSearchTerm('');
+    props.onSearch(searchTerm);
   };
 
   return (
-    <header className="p-2 flex justify-evenly items-center shadow-xl bg-white z-10 fixed w-full">
+    <form
+      onSubmit={searchHandler}
+      className="p-2 flex justify-evenly items-center shadow-xl bg-white z-10 fixed w-full"
+    >
       <div className="flex">
         <img src={logo} alt="Logo" className="h-20" />
         <div className="flex flex-col justify-center items-center">
@@ -25,9 +43,11 @@ const MainNavigation: React.FC<{ isLoggedIn: boolean }> = props => {
       <div className="relative text-md">
         <i className="fa-solid fa-magnifying-glass ml-2 text-2xl text-red-400 absolute top-[50%] translate-y-[-50%]"></i>
         <input
-          className="pt-3 pr-3 pb-3 pl-10 border-2 border-red-100 rounded-md outline-red-400 hover:bg-red-50 focus:bg-red-50"
+          onChange={event => setSearchTerm(event.target.value)}
+          value={searchTerm}
           type="text"
           placeholder="Search for a topic..."
+          className="pt-3 pr-3 pb-3 pl-10 border-2 border-red-100 rounded-md outline-red-400 hover:bg-red-50 focus:bg-red-50"
         />
       </div>
       {!props.isLoggedIn && (
@@ -53,7 +73,7 @@ const MainNavigation: React.FC<{ isLoggedIn: boolean }> = props => {
           </div>
         </div>
       )}
-    </header>
+    </form>
   );
 };
 

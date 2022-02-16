@@ -29,7 +29,6 @@ const Login: React.FC<{ isLoggedIn: boolean }> = props => {
     if (error !== '') {
       setError('');
     }
-    console.log(authenticating);
 
     setAuthenticating(true);
 
@@ -47,7 +46,6 @@ const Login: React.FC<{ isLoggedIn: boolean }> = props => {
         setError('Unable to login. Please try again later.');
       }
     }
-    console.log(authenticating);
   };
 
   const loginWithGoogleHandler = async () => {
@@ -59,7 +57,7 @@ const Login: React.FC<{ isLoggedIn: boolean }> = props => {
 
     try {
       await signInWithPopup(auth, new GoogleAuthProvider());
-      navigate('/profile');
+      return navigate('/profile');
     } catch (error: any) {
       setAuthenticating(false);
       setError(error.message);

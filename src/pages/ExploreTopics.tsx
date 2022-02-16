@@ -1,51 +1,41 @@
+import { getDatabase, ref, update, get } from 'firebase/database';
+import { getAuth } from 'firebase/auth';
+
 import TopicItem from '../components/UI/TopicItem';
+import { Topic } from '../App';
 
-const DUMMY_POSTS = [
-  {
-    title: 'I Want To Learn React and TypeScript',
-    category: 'Development',
-    content:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus id qui quas consequatur perspiciatis, accusamus voluptate adipisci quae magnam neque omnis fugiat dignissimos quidem nisi animi deserunt corporis quisquam modi facere et ducimus reprehenderit. Animi, voluptate deleniti? Quos ullam, blanditiis iusto, corrupti quaerat animi atque expedita at alias ut hic!',
-  },
-  {
-    title: 'I Want To Learn Node.JS',
-    category: 'Development',
-    content:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus id qui quas consequatur perspiciatis, accusamus voluptate adipisci quae magnam neque omnis fugiat dignissimos quidem nisi animi deserunt corporis quisquam modi facere et ducimus reprehenderit. Animi, voluptate deleniti? Quos ullam, blanditiis iusto, corrupti quaerat animi atque expedita at alias ut hic!',
-  },
-  {
-    title: 'I Want To Build an App',
-    category: 'Development',
-    content:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus id qui quas consequatur perspiciatis, accusamus voluptate adipisci quae magnam neque omnis fugiat dignissimos quidem nisi animi deserunt corporis quisquam modi facere et ducimus reprehenderit. Animi, voluptate deleniti? Quos ullam, blanditiis iusto, corrupti quaerat animi atque expedita at alias ut hic!',
-  },
-  {
-    title: 'I Want To Build an App',
-    category: 'Development',
-    content:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus id qui quas consequatur perspiciatis, accusamus voluptate adipisci quae magnam neque omnis fugiat dignissimos quidem nisi animi deserunt corporis quisquam modi facere et ducimus reprehenderit. Animi, voluptate deleniti? Quos ullam, blanditiis iusto, corrupti quaerat animi atque expedita at alias ut hic!',
-  },
-  {
-    title: 'I Want To Build an App',
-    category: 'Development',
-    content:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus id qui quas consequatur perspiciatis, accusamus voluptate adipisci quae magnam neque omnis fugiat dignissimos quidem nisi animi deserunt corporis quisquam modi facere et ducimus reprehenderit. Animi, voluptate deleniti? Quos ullam, blanditiis iusto, corrupti quaerat animi atque expedita at alias ut hic!',
-  },
-  {
-    title: 'I Want To Build an App',
-    category: 'Development',
-    content:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus id qui quas consequatur perspiciatis, accusamus voluptate adipisci quae magnam neque omnis fugiat dignissimos quidem nisi animi deserunt corporis quisquam modi facere et ducimus reprehenderit. Animi, voluptate deleniti? Quos ullam, blanditiis iusto, corrupti quaerat animi atque expedita at alias ut hic!',
-  },
-  {
-    title: 'I Want To Build an App',
-    category: 'Development',
-    content:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus id qui quas consequatur perspiciatis, accusamus voluptate adipisci quae magnam neque omnis fugiat dignissimos quidem nisi animi deserunt corporis quisquam modi facere et ducimus reprehenderit. Animi, voluptate deleniti? Quos ullam, blanditiis iusto, corrupti quaerat animi atque expedita at alias ut hic!',
-  },
-];
+// interface Topics {
+//   topics: {
+//     id: string;
+//     title: string;
+//     text: string;
+//     category: string;
+//     user: {
+//       name: string;
+//       image: string | null;
+//     };
+//     date: number;
+//     bulbs: number;
+//     hasBulbed: boolean;
+//   }[];
+// }
 
-const ExploreTopics = () => {
+const ExploreTopics: React.FC<{
+  topics: Promise<Topic>[] | Topic[] | [];
+}> = props => {
+  const database = getDatabase();
+  const auth = getAuth();
+
+  // const topics = props.topics.map(async post => {
+  //   const bulbedBy = (await get(ref(database, `topics/${post.id}`))).val()
+  //     .bulbedBy;
+
+  //   let hasBulbed = false;
+  //   if (!bulbedBy.includes(auth.currentUser?.uid)) {
+  //     hasBulbed = true;
+  //   }
+  // }
+
   return (
     <section className="flex flex-col items-center mt-16">
       <div className="flex items-center text-3xl text-red-400">
@@ -54,12 +44,17 @@ const ExploreTopics = () => {
         </h2>
       </div>
       <div className="mt-14">
-        {DUMMY_POSTS.map(post => (
+        {props.topics.map((post: any) => (
           <TopicItem
             title={post.title}
+            content={post.text}
             category={post.category}
-            content={post.content}
-            key={Math.random().toString().slice(1)}
+            user={post.user}
+            date={post.date}
+            bulbs={post.bulbs}
+            hasBulbed={post.hasBulbed}
+            id={post.id}
+            key={post.id}
           />
         ))}
       </div>

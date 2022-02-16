@@ -1,21 +1,30 @@
 import { Menu, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const UserDropdown: React.FC<{ onLogout: () => void }> = props => {
+  const [photo, setPhoto] = useState<string | null | undefined>('');
+
   const auth = getAuth();
-  const userPhoto = auth.currentUser?.photoURL;
   const userEmail = auth.currentUser?.email;
+
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      setPhoto(auth.currentUser?.photoURL);
+    } else {
+      setPhoto(null);
+    }
+  });
 
   return (
     <div className="text-right relative">
       <Menu as="div">
         <div className="flex items-center">
           <Menu.Button className="flex py-2">
-            {userPhoto ? (
+            {photo ? (
               <img
-                src={`${userPhoto}`}
+                src={`${photo}`}
                 alt="User thumbnail"
                 className="h-12 ml-5 text-slate-600 cursor-pointer rounded-[50%] hover:text-red-400 hover:scale-105 duration-300"
               />
