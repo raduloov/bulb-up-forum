@@ -5,7 +5,7 @@ const SidebarLeft = () => {
     <div className="grow flex mt-28">
       <ul className="m-auto mt-10 mb-10 text-xl">
         <li className="mb-3 hover:text-red-400 duration-300">
-          <Link to="/">Home</Link>
+          <Link to="/profile">My Profile</Link>
         </li>
         <li className="mb-3 hover:text-red-400 duration-300">
           <Link to="/explore">Explore Topics</Link>

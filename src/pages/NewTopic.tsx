@@ -21,6 +21,7 @@ const NewTopic = () => {
   const displayName = user?.displayName;
   const userEmail = user?.email;
   const userImage = user?.photoURL;
+  const userId = user?.uid;
 
   const shareHandler = async () => {
     if (error !== '') {
@@ -39,10 +40,13 @@ const NewTopic = () => {
       user: {
         name: displayName ? displayName : userEmail,
         image: userImage,
+        userId,
       },
       date: Date.now(),
       bulbs: 0,
-      bulbedBy: ['this string is here to make firebase work with empty arrays'],
+      bulbedBy: ['_'],
+      comments: ['_'],
+      totalComments: 0,
     });
 
     setSending(true);
@@ -56,7 +60,8 @@ const NewTopic = () => {
           headers: { 'Content-Type': 'application/json' },
         }
       );
-      return navigate('/');
+      navigate('/');
+      window.location.reload();
     } catch (error: any) {
       setError(error.message);
       setSending(false);

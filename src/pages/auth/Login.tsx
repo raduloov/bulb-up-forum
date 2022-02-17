@@ -69,6 +69,9 @@ const Login: React.FC<{ isLoggedIn: boolean }> = props => {
       <h3 className="text-2xl">
         Log in to your <span className="text-red-400">Bulb Up!</span> account
       </h3>
+      <p className="mt-2">
+        We recommend using your <span className="text-red-400">Google</span> Account
+      </p>
       {authenticating && <LoadingSpinner />}
       {!authenticating && (
         <div className="mt-5">

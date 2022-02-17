@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getDatabase, ref, get } from 'firebase/database';
@@ -19,6 +19,7 @@ import ProtectedRoute from './pages/ProtectedRoute';
 import NotFound from './pages/NotFound';
 import NewTopic from './pages/NewTopic';
 import LoadingSpinner from './components/UI/LoadingSpinner';
+import TopicPage from './pages/Topic';
 
 initializeApp(config.firebase);
 
@@ -30,9 +31,12 @@ export interface Topic {
   user: {
     name: string;
     image: string | null;
+    userId: string;
   };
   date: number;
   bulbs: number;
+  comments: any;
+  totalComments: number;
   hasBulbed: boolean;
 }
 
@@ -98,9 +102,12 @@ function App() {
         user: {
           name: post.user.name,
           image: post.user.image,
+          userId: post.user.userId,
         },
         date: post.date,
         bulbs: post.bulbs,
+        comments: post.comments,
+        totalComments: post.totalComments,
         hasBulbed,
       };
     });
@@ -140,10 +147,16 @@ function App() {
           {isLoading && <LoadingSpinner />}
           {!isLoading && (
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Navigate to="/explore" />} />
               <Route path="/login" element={<Login isLoggedIn={isLoggedIn} />} />
               <Route path="/signup" element={<Signup isLoggedIn={isLoggedIn} />} />
-              <Route path="/explore" element={<ExploreTopics topics={posts} />} />
+              <Route path="/explore">
+                <Route index element={<ExploreTopics topics={posts} />} />
+                <Route
+                  path="/explore/:topicId"
+                  element={<TopicPage topics={posts} />}
+                />
+              </Route>
               <Route
                 path="/profile"
                 element={<ProtectedRoute isLoggedIn={isLoggedIn} />}
