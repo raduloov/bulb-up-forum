@@ -1,7 +1,7 @@
 import { getAuth } from 'firebase/auth';
 import { getDatabase, get, ref, update } from 'firebase/database';
 import { FormEvent, useState } from 'react';
-import { NavigationType, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Topic } from '../App';
 import ErrorText from '../components/Errors';
