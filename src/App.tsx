@@ -151,7 +151,10 @@ function App() {
               <Route path="/login" element={<Login isLoggedIn={isLoggedIn} />} />
               <Route path="/signup" element={<Signup isLoggedIn={isLoggedIn} />} />
               <Route path="/explore">
-                <Route index element={<ExploreTopics topics={posts} />} />
+                <Route
+                  index
+                  element={<ExploreTopics isLoggedIn={isLoggedIn} topics={posts} />}
+                />
                 <Route
                   path="/explore/:topicId"
                   element={<TopicPage isLoggedIn={isLoggedIn} topics={posts} />}

@@ -3,6 +3,7 @@ import { Topic } from '../App';
 
 const ExploreTopics: React.FC<{
   topics: Promise<Topic>[] | Topic[] | [];
+  isLoggedIn: boolean;
 }> = props => {
   return (
     <section className="flex flex-col items-center mt-16">
@@ -14,6 +15,7 @@ const ExploreTopics: React.FC<{
       <div className="mt-14">
         {props.topics.map((post: any) => (
           <TopicItem
+            isLoggedIn={props.isLoggedIn}
             title={post.title}
             content={post.text}
             category={post.category}

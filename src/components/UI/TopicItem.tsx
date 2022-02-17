@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { getDatabase, ref, update, get } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const TopicItem: React.FC<{
+  isLoggedIn: boolean;
   title: string;
   content: string;
   category: string;
@@ -24,7 +25,13 @@ const TopicItem: React.FC<{
   const database = getDatabase();
   const auth = getAuth();
 
+  const navigate = useNavigate();
+
   const bulbPost = async (key: string, bulbs: number) => {
+    if (!props.isLoggedIn) {
+      return navigate('/login');
+    }
+
     try {
       const bulbedBy = (await get(ref(database, `topics/${key}`))).val().bulbedBy;
 
