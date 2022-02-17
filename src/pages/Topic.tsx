@@ -1,7 +1,8 @@
 import { getAuth } from 'firebase/auth';
 import { getDatabase, get, ref, update } from 'firebase/database';
 import { FormEvent, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { NavigationType, useNavigate, useParams } from 'react-router-dom';
+
 import { Topic } from '../App';
 import ErrorText from '../components/Errors';
 import Comment from '../components/UI/Comment';
@@ -9,6 +10,7 @@ import LoadingSpinner from '../components/UI/LoadingSpinner';
 
 const TopicPage: React.FC<{
   topics: Promise<Topic>[] | Topic[] | [];
+  isLoggedIn: boolean;
 }> = props => {
   const { topicId } = useParams();
 
@@ -24,6 +26,8 @@ const TopicPage: React.FC<{
   const userImage = user?.photoURL;
 
   const database = getDatabase();
+
+  const navigate = useNavigate();
 
   let curTopic: any;
   props.topics.forEach((topic: any) => {
@@ -49,6 +53,10 @@ const TopicPage: React.FC<{
 
   const addCommentHandler = async (event: FormEvent) => {
     event.preventDefault();
+
+    if (!props.isLoggedIn) {
+      return navigate('/login');
+    }
 
     setShowTextbox(true);
 

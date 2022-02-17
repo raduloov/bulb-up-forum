@@ -154,7 +154,7 @@ function App() {
                 <Route index element={<ExploreTopics topics={posts} />} />
                 <Route
                   path="/explore/:topicId"
-                  element={<TopicPage topics={posts} />}
+                  element={<TopicPage isLoggedIn={isLoggedIn} topics={posts} />}
                 />
               </Route>
               <Route
