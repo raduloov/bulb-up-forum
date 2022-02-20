@@ -104,7 +104,7 @@ const TopicPage: React.FC<{
             <h3 className="text-2xl text-center max-w-[460px] ml-2 mr-5">
               {curTopic.title}
             </h3>
-            <div className="flex">
+            <div className="flex items-center">
               <div
                 className={`p-1 ${
                   curTopic.category === 'idea' ? 'bg-yellow-400' : 'bg-emerald-500'
