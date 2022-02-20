@@ -85,7 +85,7 @@ const TopicItem: React.FC<{
           <div className="flex justify-between relative border-b-2 pb-5">
             <p className="text-sm">{`${date}`}</p>
             <h3 className="text-2xl text-center ml-2 mr-5">{props.title}</h3>
-            <div className="flex">
+            <div className="flex items-center">
               <div
                 className={`p-1 ${
                   props.category === 'idea' ? 'bg-yellow-400' : 'bg-emerald-500'

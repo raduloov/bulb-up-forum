@@ -99,30 +99,32 @@ const TopicPage: React.FC<{
     <article className="flex flex-col items-center w-[950px] mt-16 mb-14">
       <div className="flex items-center">
         <div className="w-[850px] border-2 border-dashed border-red-200 rounded-md p-5 shadow-lg hover:scale-105 duration-300">
-          <div className="flex justify-center relative border-b-2 pb-5">
-            <p className="absolute left-0 text-sm">{`${date}`}</p>
-            <h3 className="text-2xl text-center max-w-[460px] mr-5">
+          <div className="flex justify-between relative border-b-2 pb-5">
+            <p className="text-sm">{`${date}`}</p>
+            <h3 className="text-2xl text-center max-w-[460px] ml-2 mr-5">
               {curTopic.title}
             </h3>
-            <div
-              className={`p-1 ${
-                curTopic.category === 'idea' ? 'bg-yellow-400' : 'bg-emerald-500'
-              } rounded-md mr-1`}
-            >
-              <h4 className="text-white">{curTopic.category}</h4>
-            </div>
-            <div className="flex items-center absolute right-10">
-              <p className="mr-2">{curTopic.user.name}</p>
-              <div>
-                {curTopic.user.image ? (
-                  <img
-                    className="rounded-[50%] h-10"
-                    src={curTopic.user.image}
-                    alt="User"
-                  />
-                ) : (
-                  <i className="fa-regular fa-circle-user fa-2x"></i>
-                )}
+            <div className="flex">
+              <div
+                className={`p-1 ${
+                  curTopic.category === 'idea' ? 'bg-yellow-400' : 'bg-emerald-500'
+                } rounded-md mr-1 h-8`}
+              >
+                <h4 className="text-white">{curTopic.category}</h4>
+              </div>
+              <div className="flex items-center">
+                <p className="mr-2">{curTopic.user.name}</p>
+                <div>
+                  {curTopic.user.image ? (
+                    <img
+                      className="rounded-[50%] h-10"
+                      src={curTopic.user.image}
+                      alt="User"
+                    />
+                  ) : (
+                    <i className="fa-regular fa-circle-user fa-2x"></i>
+                  )}
+                </div>
               </div>
             </div>
           </div>
